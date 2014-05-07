@@ -1,0 +1,63 @@
+{
+	"V": ["Action", "StateA", "StateB","Reward"],
+	"E": [["StateA", "Action"],
+		["StateB", "Action"],
+            ["StateA", "Reward"],
+		["StateB", "Reward"],
+            ["Action","Reward"]
+		],
+    "Vdata": {
+        "Action": {
+            "parents": [
+                "StateA", 
+                "StateB"
+            ], 
+            "vals": [
+                "asdasd", 
+                "2",
+                "3",
+                "4"
+            ], 
+            "type": "discrete", 
+            "children": [
+                "Reward"
+            ]
+        }, 
+        "Reward": {
+            "mean_base": 50, 
+            "mean_scal": [], 
+            "parents": [
+                "StateA", 
+                "StateB",
+                        "Action"
+            ],
+            "variance": 18, 
+            "type": "lg", 
+            "children": null
+        }, 
+        "StateA": {
+            "mean_base": 50, 
+            "mean_scal": [], 
+            "parents": null, 
+            "variance": 18, 
+            "type": "lg", 
+            "children": [
+                "Action",
+                    "Reward"
+            ]
+        }, 
+        "StateB": {
+            "mean_base": -110, 
+            "mean_scal": [
+                2
+            ], 
+            "parents": null, 
+            "variance": 10, 
+            "type": "lg", 
+            "children": [
+                "Action",
+                    "Reward"
+]
+        }
+    }
+}
