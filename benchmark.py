@@ -26,7 +26,7 @@ import os
 
 
 def main(parameters):
-    numpy.random.seed(parameters["seed"])
+    #numpy.random.seed(parameters["seed"])
     label = sys.argv[-1]   # Sumatra appends the label to the command line
     subdir = os.path.join("mydata", label)
     os.mkdir(subdir)
