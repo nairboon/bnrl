@@ -18,6 +18,31 @@ from scipy import mean
 
 from learner import BNL, ActionValueBayesianNetwork
 
+
+import sumatra.parameters as p
+import numpy
+import sys
+
+
+def main(parameters):
+    numpy.random.seed(parameters["seed"])
+    
+    for scenario in parameters["scenarios"]:
+        print scenario
+    
+    
+    exit
+    #output_file = "example.dat"
+    #numpy.savetxt(output_file, data)
+
+parameter_file = sys.argv[1]
+parameters = p.SimpleParameterSet(parameter_file)
+
+
+main(parameters)
+
+
+
 # switch this to True if you want to see the cart balancing the pole (slower)
 render = False
 

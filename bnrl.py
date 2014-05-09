@@ -25,7 +25,7 @@ if render:
     renderer.start()
 
 # to inputs state and 4 actions
-module = ActionValueBayesianNetwork(2, 4)
+module = ActionValueBayesianNetwork(2, 3)
 
 task = DiscreteBalanceTask(env, 100)
 learner = BNL()
