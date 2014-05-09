@@ -22,20 +22,35 @@ from learner import BNL, ActionValueBayesianNetwork
 import sumatra.parameters as p
 import numpy
 import sys
-
+import os
 
 
 def main(parameters):
     numpy.random.seed(parameters["seed"])
-    
+    label = sys.argv[-1]   # Sumatra appends the label to the command line
+    subdir = os.path.join("mydata", label)
+    os.mkdir(subdir)
+
+    res = {}
     for scenario in parameters["scenarios"]:
+        res[scenario] = {}
         for algorithm in parameters["algorithms"]:
             rewards = []
-            for n in range(1,parameters["N"]):
+            for n in range(0,parameters["N"]):
                 #get the correct function
                 f = getattr(__import__(algorithm), "run")
                 reward = f(parameters)
                 rewards.append(reward)
+                
+            res[scenario][algorithm] = rewards
+            fileid = "%s_%s_%d.txt" % (scenario, algorithm, n)
+            fn = os.path.join(subdir, fileid)
+
+            numpy.savetxt(fn, rewards)
+
+    
+    print "res:", res
+
             
     
     
