@@ -40,13 +40,13 @@ def main(parameters):
                 #get the correct function
                 f = getattr(__import__(algorithm), "run")
                 reward = f(parameters)
-                rewards.append(reward)
+                #rewards.append(reward)
                 
-            res[scenario][algorithm] = rewards
-            fileid = "%s_%s_%d.txt" % (scenario, algorithm, n)
-            fn = os.path.join(subdir, fileid)
-
-            numpy.savetxt(fn, rewards)
+            #res[scenario][algorithm] = rewards
+                fileid = "%s_%s_%d.txt" % (scenario, algorithm, n)
+                fn = os.path.join(subdir, fileid)
+    
+                numpy.savetxt(fn, reward)
 
     
     print "res:", res
