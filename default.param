@@ -3,13 +3,13 @@
 # Example parameter file
 seed = 42
 CPU = 4
-#scenarios = ["JustBalanceTask","EasyBalanceTask"] # "BalanceTask",
-scenarios = ["EasyBalanceTask"] # "BalanceTask",
+scenarios = ["JustBalanceTask","EasyBalanceTask"] # "BalanceTask",
+#scenarios = ["EasyBalanceTask"] # "BalanceTask",
 
 #algorithms = ["NFQ","BNRL"] # nfq
 algorithms = ["BNRL"] # nfq
 
-N = 10 #20
+N = 30 #20
 
 AcceptableScore = -20
 
