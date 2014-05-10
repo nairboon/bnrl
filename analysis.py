@@ -19,27 +19,42 @@ from ggplot import *
 def average_run(acceptable, fn):
     c = pd.read_csv(fn)
     #c = pd.read_csv("mydata/"+runid+"/"+name)#,index_col=0)
-    nc = c.columns.values
-    nc[0] = "i"
-    c.columns = nc
+    #print c.columns
+#    nc = c.columns.values
+#    nc[0] = "i"
+#    c.columns = nc
     
-    jn = c.drop("i",1)
-    avg = jn.mean(1)
+    jn = c
     
-    da = pd.DataFrame(avg)
+    if len(c.columns) < 2:
+        #print "yo", c.columns
+        avg = c["0"]
+    else:  
+        avg = c.mean(1)
+        
+    #print avg
+     
+    da = pd.DataFrame({"avg":avg})
     da["i"]=da.index
     
     
     da["Name"] = os.path.basename(fn)[:-4]
     #print da
-
-    n = len(jn.columns )
-    ylabel = "Avg Reward over %d runs" % n
-    avgr = ggplot(c,aes(x="i",y="0"))+geom_point()+geom_line()+ \
-     xlab("Episodes") + ylab(ylabel) #stat_smooth(color='blue')
-    #ggsave(avgr,fn+"_plot.png")
-    #print avgr
     
+#    n = len(c.columns)
+#    ylabel = "Avg Reward over %d runs" % n
+#    avgr = ggplot(da,aes(x="i",y="0"))+geom_point()+geom_line()+ \
+#     xlab("Episodes") + ylab(ylabel) #stat_smooth(color='blue')
+    #ggsave(avgr,fn+"_plot.png")
+   
+    
+#    jn = jn.drop("i",1)
+#    jn = jn.drop("Name",1)
+    n = len(jn.columns)
+    #print n, jn
+#    print jn
+#    print avgr
+     
     # converge indicator
     cv = []
     for run in jn.columns:
@@ -50,7 +65,7 @@ def average_run(acceptable, fn):
                 found = True
                 break
         if not found:
-            cv.append(-9999)
+            cv.append(999)
     #print jn
     #print cv
     
@@ -61,7 +76,7 @@ def average_run(acceptable, fn):
         for i in range(start-1,len(cv)):
             j = i+1
             avg  = numpy.mean(cv[:j])
-            print avg,j, cv[:j]
+            #print avg,j, cv[:j]
             ns.append(j)
             avgs.append(avg)
     else:
@@ -70,10 +85,10 @@ def average_run(acceptable, fn):
         
     ap = pd.DataFrame({'n':ns,'avg':avgs})
     #print ap
-    ylabel = "Avg Reward over %d runs" % n
-    avgdis = ggplot(ap,aes(x="n",y="avg"))+geom_point()+stat_smooth(color='blue')+ \
-    labs(x="Numer of Experiment replicas",y="Avg Acceptable Solution",title="Required Replicas")    
-    #print avgdis
+#    ylabel = "Avg Reward over %d runs" % n
+#    avgdis = ggplot(ap,aes(x="n",y="avg"))+geom_point()+stat_smooth(color='blue')+ \
+#    labs(x="Numer of Experiment replicas",y="Avg Acceptable Solution",title="Required Replicas")    
+#    #print avgdis
      
     return (da,ap)
     
@@ -120,9 +135,9 @@ def main(parameters):
     
     
     #ploting all runs
-    all_df["y"] = all_df[0]
+    #all_df["y"] = all_df["0"]
     #print all_df
-    all_plot = ggplot(aes(x='i', y='y',colour="Name"), data=all_df) + geom_point() + geom_line()
+    all_plot = ggplot(aes(x='i', y='avg',colour="Name"), data=all_df) + geom_point() + geom_line()
     ggsave(all_plot,os.path.join(subdir, "all_runs.png"))
 
     #final comparison

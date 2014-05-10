@@ -3,15 +3,20 @@
 # Example parameter file
 seed = 42
 CPU = 4
-scenarios = ["JustBalanceTask","EasyBalanceTask"] # "BalanceTask",
-algorithms = ["NFQ","BNRL"] # nfq
+#scenarios = ["JustBalanceTask","EasyBalanceTask"] # "BalanceTask",
+scenarios = ["EasyBalanceTask"] # "BalanceTask",
+
+#algorithms = ["NFQ","BNRL"] # nfq
+algorithms = ["NFQ"] # nfq
+
 N = 4 #20
 
 AcceptableScore = -20
 
-EpisodesPerLearn = 1 # 10
-MaxTotalEpisodes = 10 #100
-MaxRunsPerEpisode = 20 #30
-TestAfter = 2 #50
+EpisodesPerLearn = 2 # 10
+MaxTotalEpisodes = 300 #100
+MaxRunsPerEpisode = 25 #30
+MaxRunsPerEpisodeTest = 50 #30
+TestAfter = 1 #50
 TestWith = 4 #10
 ExplorerEpsilon = 0.050001

@@ -2,18 +2,17 @@
 
 # parameter file for real experimental conditions
 seed = 42
-scenarios = ["Disc"]
-algorithms = ["bnrl"]
-N = 10 #20
+CPU = 4
+scenarios = ["JustBalanceTask","EasyBalanceTask"] # "BalanceTask",
+algorithms = ["NFQ","BNRL"] # nfq
+N = 4 #20
 
+AcceptableScore = -20
 
-EpisodesPerLearn = 1 # 10
-
-MaxTotalEpisodes = 50 #100
-
-MaxRunsPerEpisode = 50
-
-TestAfter = 5 #50
-TestWith = 4 #10
-
-ExplorerEpsilon = 0.10001
+EpisodesPerLearn = 10 # 10
+MaxTotalEpisodes = 100
+MaxRunsPerEpisode = 200
+MaxRunsPerEpisodeTest = 500 #30
+TestAfter = 50 #50
+TestWith = 10 #10
+ExplorerEpsilon = 0.050001

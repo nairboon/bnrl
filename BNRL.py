@@ -34,7 +34,8 @@ def run(arg):
     
     task_class = getattr(cp, task)
     task = task_class(env, parameters["MaxRunsPerEpisode"])
-    
+    testtask = task_class(env, parameters["MaxRunsPerEpisodeTest"])
+
     #print "dim: ", task.indim, task.outdim
     
     # to inputs state and 4 actions
@@ -49,7 +50,9 @@ def run(arg):
     agent = LearningAgent(module, learner)
     testagent = LearningAgent(module, None)
     experiment = EpisodicExperiment(task, agent)
-    
+    testexperiment = EpisodicExperiment(testtask, testagent)
+
+
     def plotPerformance(values, fig):
         plt.figure(fig.number)
         plt.clf()
@@ -78,12 +81,12 @@ def run(arg):
         if (episode) % parameters["TestAfter"] == 0:
             #print "Evaluating at episode: ", episode
             
-            experiment.agent = testagent
-            r = mean([sum(x) for x in experiment.doEpisodes(parameters["TestWith"])])
+            #experiment.agent = testagent
+            r = mean([sum(x) for x in testexperiment.doEpisodes(parameters["TestWith"])])
             
             env.delay = False
             testagent.reset()
-            experiment.agent = agent
+            #experiment.agent = agent
         
             performance.append(r)
             if plot:
