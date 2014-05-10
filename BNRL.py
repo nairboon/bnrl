@@ -14,8 +14,11 @@ from learner import BNL, ActionValueBayesianNetwork
 
 # switch this to True if you want to see the cart balancing the pole (slower)
 
-def run(task, parameters):
-    print "run with", parameters
+#def run(task, parameters):
+def run(arg):
+    task = arg[0]
+    parameters = arg[1]
+    #print "run with", task,parameters
     
     
     render = False    
@@ -73,7 +76,7 @@ def run(task, parameters):
             env.delay = True
         
         if (episode) % parameters["TestAfter"] == 0:
-            print "Evaluating at episode: ", episode
+            #print "Evaluating at episode: ", episode
             
             experiment.agent = testagent
             r = mean([sum(x) for x in experiment.doEpisodes(parameters["TestWith"])])
@@ -86,12 +89,12 @@ def run(task, parameters):
             if plot:
                 plotPerformance(performance, pf_fig)
         
-            print "reward avg", r
-            print "explorer epsilon", learner.explorer.epsilon
-            print "num episodes", agent.history.getNumSequences()
-            print "update step", len(performance)
+#            print "reward avg", r
+#            print "explorer epsilon", learner.explorer.epsilon
+#            print "num episodes", agent.history.getNumSequences()
+#            print "update step", len(performance)
             
-    print "done"
+#    print "done"
     return performance
             
         #print "network",   json.dumps(module.bn.net.E, indent=2)

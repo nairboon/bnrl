@@ -25,8 +25,10 @@ import sys
 import os
 
 import pandas as pd
+from progressbar import *               # just a simple progress bar
 
-import analysis as a
+from multiprocessing import Pool
+
 
 def main(parameters):
     #numpy.random.seed(parameters["seed"])
@@ -35,31 +37,51 @@ def main(parameters):
     #os.mkdir(subdir)
 
     res = {}
+    maxval = len(parameters["scenarios"]) * len(parameters["algorithms"]) * parameters["N"]
+    widgets = ['Progress: ', Percentage(), ' ', Bar(marker='0',left='[',right=']'),
+           ' ', ETA(), ' ', RotatingMarker()] #see docs for other options
+    pbar = ProgressBar(widgets=widgets, maxval=maxval)
+    pbar.start()
+    
+    i = 0
+    pool = Pool(processes=parameters["CPU"])
     for scenario in parameters["scenarios"]:
         res[scenario] = {}
         for algorithm in parameters["algorithms"]:
             rewards = {}
+            call = []
+            f = getattr(__import__(algorithm), "run")
+
             for n in range(0,parameters["N"]):
-                print n, "out of ", parameters["N"]
+#                print n, "out of ", parameters["N"]
                 #get the correct function
-                f = getattr(__import__(algorithm), "run")
-                reward = f(scenario,parameters)
+                call.append([scenario,parameters])
+                
+            it = pool.imap(f, call,1)
+            n=0
+            for reward in it:
+                #reward = f(scenario,parameters)
+                #print reward
                 rewards[n]= pd.Series(reward)
+                n+=1
+                i+=1
+                pbar.update(i) #this adds a little symbol at each iteration
                 
             fileid = "%s_%s.txt" % (scenario, algorithm)
             fn = os.path.join(subdir, fileid)
             df = pd.DataFrame(rewards)
-            print df
+            #print df
             df.to_csv(fn,index=False)
             
             #res[scenario][algorithm] = a.average_run(parameters["AcceptableScore"],fn)
             
 
             #numpy.savetxt(fn, rewards,delimiter=", ")
-                
+    print "starting analysis..."
+    import analysis
+    pbar.finish()
         
 
-    print "res:", res
 #    print df
 #    fn = os.path.join(subdir, "res.csv")
 #    

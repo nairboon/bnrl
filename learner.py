@@ -85,20 +85,18 @@ class PGMTrainer(Trainer):
         assert len(self.ds) > 0, "Dataset cannot be empty."
 
         if len(self.ds) < 10:
-            print "burn"
+#            print "burn"
             self.module.burn = True
             return
         else:
             self.module.burn = False
             
-        bds = []
         gbds = []
         for seq in self.ds:
             for state_, action_, reward_ in seq:
 
                 sample = dict(StateA=state_[0],StateB=state_[1],Action=action_[0],Reward=reward_[0])
                 
-                bds.append(sample)
                 if sample["Reward"] >= -0:
                     gbds.append(sample)
                 #print sample["Reward"]
@@ -115,7 +113,7 @@ class PGMTrainer(Trainer):
         
         #print bds
         # estimate parameters
-        print "data size: ", len(bds),  len(gbds)
+#        print "data size: ", len(bds),  len(gbds)
         
         
         if len(gbds) < 5: #there was no rewarding action, so nothing to learn

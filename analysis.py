@@ -31,7 +31,7 @@ def average_run(acceptable, fn):
     
     
     da["Name"] = os.path.basename(fn)[:-4]
-    print da
+    #print da
 
     n = len(jn.columns )
     ylabel = "Avg Reward over %d runs" % n
@@ -57,15 +57,19 @@ def average_run(acceptable, fn):
     start = 2
     ns = []
     avgs = []
-    for i in range(start-1,len(cv)):
-        j = i+1
-        avg  = numpy.mean(cv[:j])
-        print avg,j, cv[:j]
-        ns.append(j)
-        avgs.append(avg)
+    if len(cv) > 1:
+        for i in range(start-1,len(cv)):
+            j = i+1
+            avg  = numpy.mean(cv[:j])
+            print avg,j, cv[:j]
+            ns.append(j)
+            avgs.append(avg)
+    else:
+        ns.append(1)
+        avgs.append(1)
         
     ap = pd.DataFrame({'n':ns,'avg':avgs})
-    print ap
+    #print ap
     ylabel = "Avg Reward over %d runs" % n
     avgdis = ggplot(ap,aes(x="n",y="avg"))+geom_point()+stat_smooth(color='blue')+ \
     labs(x="Numer of Experiment replicas",y="Avg Acceptable Solution",title="Required Replicas")    
@@ -102,11 +106,14 @@ def main(parameters):
                 
             
             all_df = all_df.append(da)
+            #print algorithm,ax,ay, ap
+#            if len(ay) == 0:
+                
             final_df = final_df.append(dict(Algorithm=algorithm,Task=scenario,Steps=ay[-1]),ignore_index=True)
                 
     # showing that we have enough runs
     df = pd.DataFrame({"Name":an,"Runs":ax,"Avg":ay})
-    print df
+    #print df
     p = ggplot(aes(x='Runs',y="Avg"), data=df) + geom_point() + geom_line()+ \
     facet_wrap("Name")
     ggsave(p,os.path.join(subdir, "avg_runs.png"))
