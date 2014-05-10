@@ -24,6 +24,9 @@ import numpy
 import sys
 import os
 
+import pandas as pd
+
+import analysis as a
 
 def main(parameters):
     #numpy.random.seed(parameters["seed"])
@@ -35,21 +38,32 @@ def main(parameters):
     for scenario in parameters["scenarios"]:
         res[scenario] = {}
         for algorithm in parameters["algorithms"]:
-            rewards = []
+            rewards = {}
             for n in range(0,parameters["N"]):
+                print n, "out of ", parameters["N"]
                 #get the correct function
                 f = getattr(__import__(algorithm), "run")
-                reward = f(parameters)
-                #rewards.append(reward)
+                reward = f(scenario,parameters)
+                rewards[n]= pd.Series(reward)
                 
-            #res[scenario][algorithm] = rewards
-                fileid = "%s_%s_%d.txt" % (scenario, algorithm, n)
-                fn = os.path.join(subdir, fileid)
-    
-                numpy.savetxt(fn, reward)
+            fileid = "%s_%s.txt" % (scenario, algorithm)
+            fn = os.path.join(subdir, fileid)
+            df = pd.DataFrame(rewards)
+            print df
+            df.to_csv(fn)
+            
+            #res[scenario][algorithm] = a.average_run(parameters["AcceptableScore"],fn)
+            
 
-    
+            #numpy.savetxt(fn, rewards,delimiter=", ")
+                
+        
+
     print "res:", res
+#    print df
+#    fn = os.path.join(subdir, "res.csv")
+#    
+    
 
             
     

@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 
 # Example parameter file
-seed = 42
-scenarios = ["d"]
-algorithms = ["bnrl","nfq"]
-N = 2 #20
+seed = 43
+scenarios = ["JustBalanceTask","EasyBalanceTask"] # "BalanceTask",
+algorithms = ["bnrl"] # nfq
+N = 4 #20
 
+AcceptableScore = -20
 
-EpisodesPerLearn = 3 # 10
-MaxTotalEpisodes = 6 #100
-MaxRunsPerEpisode = 30 #30
-TestAfter = 5 #50
-TestWith = 2 #10
-ExplorerEpsilon = 0.10001
+EpisodesPerLearn = 1 # 10
+MaxTotalEpisodes = 30 #100
+MaxRunsPerEpisode = 20 #30
+TestAfter = 2 #50
+TestWith = 4 #10
+ExplorerEpsilon = 0.050001

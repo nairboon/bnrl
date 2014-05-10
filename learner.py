@@ -40,7 +40,7 @@ class BN:
 
          # just return a random action 
          if self.burn:
-             return random.randint(self.numActions)
+             return random.uniform(-100,100)
              
 
          evidence = dict(StateA=state[0], StateB=state[1])
@@ -49,7 +49,7 @@ class BN:
          result = self.net.randomsample(12, evidence)
          
         
-         bins = array([0.0, 1.0, 2.0, 3.0])
+         #bins = array([0.0, 1.0, 2.0, 3.0])
 
          
 #         t = pd.cut(ac, 4,labels=False)
@@ -65,9 +65,9 @@ class BN:
          # so the action with highest reward is
          action = result[i]["Action"]
          #print "action:", action
-         
+         return action
          # determine which bin it belongs to
-         return digitize([action],bins)
+         #return digitize([action],bins)
          
 
 
@@ -99,15 +99,15 @@ class PGMTrainer(Trainer):
                 sample = dict(StateA=state_[0],StateB=state_[1],Action=action_[0],Reward=reward_[0])
                 
                 bds.append(sample)
-                if sample["Reward"] > 0:
+                if sample["Reward"] >= -0:
                     gbds.append(sample)
                 #print sample["Reward"]
 
         # sort samples for highest reward
 #        bdss = sorted(gbds, key=lambda tup: tup["Reward"],reverse=True)
 #        
-#        print "BDS: "
-#        print json.dumps(gbds, indent=2)
+        #print "BDS: "
+        #print json.dumps(gbds, indent=2)
 #        print "BDSS: "
 #        print json.dumps(bdss, indent=2)
         
@@ -117,10 +117,19 @@ class PGMTrainer(Trainer):
         # estimate parameters
         print "data size: ", len(bds),  len(gbds)
         
+        
         if len(gbds) < 5: #there was no rewarding action, so nothing to learn
           self.module.burn = True
           return
+          
+        N = 1000
+        if len(gbds) > N:
+            #only take the newest N samples
 
+            l = len(gbds)
+            gbds = gbds[l-N:]
+            print "new effective set", len(gbds)
+        
         skel = GraphSkeleton()
         #load network topology
         skel.load("net.txt")

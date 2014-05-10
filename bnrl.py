@@ -8,12 +8,13 @@ from matplotlib import pyplot as plt
 
 from scipy import mean
 
+from pybrain.rl.environments import cartpole as cp
 
 from learner import BNL, ActionValueBayesianNetwork
 
 # switch this to True if you want to see the cart balancing the pole (slower)
 
-def run(parameters):
+def run(task, parameters):
     print "run with", parameters
     
     
@@ -28,10 +29,15 @@ def run(parameters):
         env.setRenderer(renderer)
         renderer.start()
     
-    # to inputs state and 4 actions
-    module = ActionValueBayesianNetwork(2, 3)
+    task_class = getattr(cp, task)
+    task = task_class(env, parameters["MaxRunsPerEpisode"])
     
-    task = DiscreteBalanceTask(env, parameters["MaxRunsPerEpisode"])
+    #print "dim: ", task.indim, task.outdim
+    
+    # to inputs state and 4 actions
+    module = ActionValueBayesianNetwork(task.outdim, task.indim)
+    
+
     learner = BNL()
     # % of random actions
     learner.explorer.epsilon = parameters["ExplorerEpsilon"]
@@ -54,7 +60,8 @@ def run(parameters):
     if plot:
         pf_fig = plt.figure()
     
-    for episode in range(0,parameters["MaxTotalEpisodes"]):
+    m = parameters["MaxTotalEpisodes"]/parameters["EpisodesPerLearn"]
+    for episode in range(0,m):
     	# one learning step after one episode of world-interaction
         experiment.doEpisodes(parameters["EpisodesPerLearn"])
         agent.learn(1)
