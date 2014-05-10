@@ -7,9 +7,9 @@ CPU = 4
 scenarios = ["EasyBalanceTask"] # "BalanceTask",
 
 #algorithms = ["NFQ","BNRL"] # nfq
-algorithms = ["NFQ"] # nfq
+algorithms = ["BNRL"] # nfq
 
-N = 4 #20
+N = 10 #20
 
 AcceptableScore = -20
 

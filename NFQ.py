@@ -23,15 +23,27 @@ from learner import BNL, ActionValueBayesianNetwork
 
 # switch this to True if you want to see the cart balancing the pole (slower)
 
+import numpy
+
+import multiprocessing
+
 #def run(task, parameters):
 def run(arg):
     task = arg[0]
     parameters = arg[1]
     #print "run with", parameters
     
+    seed = parameters["seed"]
+   
+
+    process_id = hash(multiprocessing.current_process()._identity)
+    numpy.random.seed(seed + process_id)
+
+
+    
     
     render = False    
-    plot = True
+    plot = False
     
     plt.ion()
     

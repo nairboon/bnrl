@@ -13,6 +13,10 @@ from pybrain.rl.environments import cartpole as cp
 from learner import BNL, ActionValueBayesianNetwork
 
 # switch this to True if you want to see the cart balancing the pole (slower)
+import numpy
+
+import multiprocessing
+
 
 #def run(task, parameters):
 def run(arg):
@@ -20,6 +24,12 @@ def run(arg):
     parameters = arg[1]
     #print "run with", task,parameters
     
+    
+    seed = parameters["seed"]
+   
+
+    process_id = hash(multiprocessing.current_process()._identity)
+    numpy.random.seed(seed + process_id)
     
     render = False    
     plot = False
