@@ -50,7 +50,7 @@ def main(parameters):
             fn = os.path.join(subdir, fileid)
             df = pd.DataFrame(rewards)
             print df
-            df.to_csv(fn)
+            df.to_csv(fn,index=False)
             
             #res[scenario][algorithm] = a.average_run(parameters["AcceptableScore"],fn)
             
