@@ -180,10 +180,10 @@ def run(arg):
         #print "network",   json.dumps(module.bn.net.E, indent=2)
             
             
-import sumatra.parameters as p
-import sys
-parameter_file = sys.argv[1]
-parameters = p.SimpleParameterSet(parameter_file)
-
-
-run(["BalanceTask",parameters])
+#import sumatra.parameters as p
+#import sys
+#parameter_file = sys.argv[1]
+#parameters = p.SimpleParameterSet(parameter_file)
+#
+#
+#run(["BalanceTask",parameters])

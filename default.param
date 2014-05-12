@@ -9,7 +9,7 @@ scenarios = ["JustBalanceTask","EasyBalanceTask","BalanceTask"] # "BalanceTask",
 algorithms = ["ENAC","BNRL"] # nfq
 #algorithms = ["PGPE","BNRL"] # nfq
 
-N = 4 #20
+N = 8 #20
 
 AcceptableScore = -70
 
