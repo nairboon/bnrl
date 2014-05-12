@@ -6,7 +6,7 @@ CPU = 4
 scenarios = ["JustBalanceTask","EasyBalanceTask","BalanceTask"] # "BalanceTask",
 #scenarios = ["EasyBalanceTask"] # "BalanceTask",
 
-algorithms = ["ENAC","BNRL"] # nfq
+algorithms = ["PGPE","BNRL"] # nfq
 #algorithms = ["PGPE","BNRL"] # nfq
 
 N = 8 #20
