@@ -32,7 +32,7 @@ def run(arg):
     numpy.random.seed(seed + process_id)
     
     render = False    
-    plot = True
+    plot = False
     
     plt.ion()
     
@@ -79,9 +79,9 @@ def run(arg):
     m = parameters["MaxTotalEpisodes"]/parameters["EpisodesPerLearn"]
     for episode in range(0,m):
     	# one learning step after one episode of world-interaction
-        experiment.doEpisodes(parameters["EpisodesPerLearn"])
+        y =experiment.doEpisodes(parameters["EpisodesPerLearn"])
         agent.learn(1)
-    
+#        print len(y[0])
         #renderer.drawPlot()
         
         # test performance (these real-world experiences are not used for training)
@@ -94,9 +94,9 @@ def run(arg):
             #experiment.agent = testagent
             r = mean([sum(x) for x in testexperiment.doEpisodes(parameters["TestWith"])])
             
-            xx = testexperiment.doEpisodes(parameters["TestWith"])
-            print xx
-            exit(0)
+#            xx = testexperiment.doEpisodes(parameters["TestWith"])
+#            u = [sum(x) for x in xx]
+         
             env.delay = False
             testagent.reset()
             #experiment.agent = agent

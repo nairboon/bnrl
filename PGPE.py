@@ -55,7 +55,7 @@ def run(arg):
     
     
     render = False    
-    plot = True
+    plot = False
     
     plt.ion()
     
@@ -67,6 +67,7 @@ def run(arg):
     
     task_class = getattr(cp, task)
     task = task_class(env, parameters["MaxRunsPerEpisode"])
+    
     testtask = task_class(env, parameters["MaxRunsPerEpisodeTest"],desiredValue=None)
 
     #print "dim: ", task.indim, task.outdim
@@ -82,7 +83,7 @@ def run(arg):
     #learner.explorer.epsilon = parameters["ExplorerEpsilon"]
     
     
-    agent = OptimizationAgent(module, PGPE(storeAllEvaluations = True, maxEvaluations=None,desiredEvaluation=1, verbose=False,maxLearningSteps=None))
+    agent = OptimizationAgent(module, PGPE(storeAllEvaluations = True,storeAllEvaluated=False, maxEvaluations=None,desiredEvaluation=1, verbose=False))
 #
 #    print agent
 #    from pprint import pprint
@@ -124,20 +125,29 @@ def run(arg):
             #experiment.agent = testagent
             #r = mean([sum(x) for x in testexperiment.doEpisodes(parameters["TestWith"])])
             #for i in range(0,parameters["TestWith"]):
-            y = experiment.doEpisodes(parameters["TestWith"])
-            print y   
-                
+#            y = testexperiment.doEpisodes(1)
+#            print (agent.learner._allEvaluated)
+#                
+#            
+#            from pprint import pprint
+#            pprint (vars(task))
                 
             l = parameters["TestWith"]
+            
+            task.N = parameters["MaxRunsPerEpisodeTest"]
+            experiment.doEpisodes(l)
+            task.N = parameters["MaxRunsPerEpisode"]
+
             resList = (agent.learner._allEvaluations)[-l:-1]
             
-            print agent.learner._allEvaluations
+#            print agent.learner._allEvaluations
             from scipy import array
 
             rLen = len(resList)
             avReward = array(resList).sum()/rLen
-            print resList
-            exit(0)
+#            print avReward
+#            print resList
+#            exit(0)
 #            print("Parameters:", agent.learner._bestFound())
 #            print(
 #                " Evaluation:", episode,
