@@ -47,9 +47,9 @@ class BN:
 
          evidence = dict(theta=state[0], thetaPrime=state[1],s=state[2], sPrime=state[3])
         # sample the network given evidence
-         result = self.net.randomsample(1, evidence)
+         result = self.net.randomsample(10, evidence)
          
-         return result[0]["Action"]
+#         return result[0]["Action"]
         
          #bins = array([0.0, 1.0, 2.0, 3.0])
 
