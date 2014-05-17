@@ -1,9 +1,10 @@
 {
-	"V": ["Action", "StateA", "StateB","Reward"],
+	"V": ["Action", "StateA", "StateB","StateC","StateD","Reward"],
 	"E": [["StateA", "Action"],
 		["StateB", "Action"],
-            ["StateA", "Reward"],
-		["StateB", "Reward"],
+            ["StateC", "Reward"],
+		["StateD", "Reward"],
+
             ["Action","Reward"]
 		],
     "Vdata": {
@@ -27,9 +28,12 @@
             "mean_base": 50, 
             "mean_scal": [], 
             "parents": [
-                "StateA", 
-                "StateB",
-                        "Action"
+                "StateC", 
+                "StateD",
+                        "Action",
+"StateA",
+"StateB"
+
             ],
             "variance": 18, 
             "type": "lg", 
@@ -43,7 +47,7 @@
             "type": "lg", 
             "children": [
                 "Action",
-                    "Reward"
+"Reward"
             ]
         }, 
         "StateB": {
@@ -56,8 +60,32 @@
             "type": "lg", 
             "children": [
                 "Action",
-                    "Reward"
+"Reward"
+]
+        },
+
+        "StateC": {
+            "mean_base": 50, 
+            "mean_scal": [], 
+            "parents": null, 
+            "variance": 18, 
+            "type": "lg", 
+            "children": [
+                "Reward"
+            ]
+        }, 
+        "StateD": {
+            "mean_base": -110, 
+            "mean_scal": [
+                2
+            ], 
+            "parents": null, 
+            "variance": 10, 
+            "type": "lg", 
+            "children": [
+                "Reward"
 ]
         }
+
     }
 }

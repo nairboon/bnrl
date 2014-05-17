@@ -43,11 +43,13 @@ class BN:
              return random.uniform(-100,100)
              
 
-         evidence = dict(StateA=state[0], StateB=state[1])
+         #evidence = dict(StateA=state[0], StateB=state[2],StateC=state[1], StateD=state[3])
 
+         evidence = dict(theta=state[0], thetaPrime=state[1],s=state[2], sPrime=state[3])
         # sample the network given evidence
-         result = self.net.randomsample(12, evidence)
+         result = self.net.randomsample(1, evidence)
          
+         return result[0]["Action"]
         
          #bins = array([0.0, 1.0, 2.0, 3.0])
 
@@ -95,8 +97,9 @@ class PGMTrainer(Trainer):
         for seq in self.ds:
             for state_, action_, reward_ in seq:
 
-                sample = dict(StateA=state_[0],StateB=state_[1],Action=action_[0],Reward=reward_[0])
-                
+                #sample = dict(StateA=state_[0],StateB=state_[2],StateC=state_[1],StateD=state_[3],Action=action_[0],Reward=reward_[0])
+                sample = dict(theta=state_[0],thetaPrime=state_[2],s=state_[1],sPrime=state_[3],Action=action_[0],Reward=reward_[0])
+
                 if sample["Reward"] >= -0:
                     gbds.append(sample)
                 #print sample["Reward"]
@@ -126,11 +129,12 @@ class PGMTrainer(Trainer):
 
             l = len(gbds)
             gbds = gbds[l-N:]
-            print "new effective set", len(gbds)
+#            print "new effective set", len(gbds)
         
         skel = GraphSkeleton()
         #load network topology
-        skel.load("net.txt")
+        #skel.load("net.txt")
+        skel.load("workfile")
         skel.toporder()
 
 
