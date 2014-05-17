@@ -94,6 +94,7 @@ def main(parameters):
     #numpy.savetxt(output_file, data)
 
 parameter_file = sys.argv[1]
+print sys.argv
 parameters = p.SimpleParameterSet(parameter_file)
 
 
