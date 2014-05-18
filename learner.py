@@ -27,7 +27,7 @@ from libpgm.graphskeleton import GraphSkeleton
 
 import json
 
-from numpy import digitize, bincount
+from numpy import digitize, bincount, mean
 from scipy import random
 #import pandas as pd
 
@@ -42,13 +42,19 @@ class BN:
          if self.burn:
              return random.uniform(-100,100)
              
-
-         #evidence = dict(StateA=state[0], StateB=state[2],StateC=state[1], StateD=state[3])
-
-         evidence = dict(theta=state[0], thetaPrime=state[1],s=state[2], sPrime=state[3])
-        # sample the network given evidence
-         result = self.net.randomsample(10, evidence)
+         #print state
+         evidence = dict(StateA=state[0], StateB=state[1],StateC=state[1], StateD=state[3])
          
+         #evidence = dict(theta=state[0],thetaV=state[1],s=state[2],sV=state[3],Reward=0)
+
+         #evidence = dict(theta=state[0], thetaPrime=state[1],s=state[2], sPrime=state[3])
+        # sample the network given evidence
+        
+         result = self.net.randomsample(10, evidence)
+         evidence["Reward"] = -1
+#         result2 = self.net.randomsample(10, evidence)
+
+         #print evidence, result[0],"\n"
 #         return result[0]["Action"]
         
          #bins = array([0.0, 1.0, 2.0, 3.0])
@@ -59,13 +65,25 @@ class BN:
 #         r = argmax(counts)
          
          a = []
+         av = []
          for x in result:
              a.append(x["Reward"])
+             av.append(x["Action"])
+          
+#         av2 = []
+#         for x in result2:
+#             av.append(x["Action"])
              
          i = argmax(a) #position of highest reward
          
+         avg = mean(av)
+         #avg2 = mean(av2)
+         #print abs(avg-avg2), avg, avg2
          # so the action with highest reward is
          action = result[i]["Action"]
+         
+         return avg
+         #print avg,action,"yo"
          #print "action:", action
          return action
          # determine which bin it belongs to
@@ -86,22 +104,26 @@ class PGMTrainer(Trainer):
         """Train the associated module for one epoch."""
         assert len(self.ds) > 0, "Dataset cannot be empty."
 
-        if len(self.ds) < 10:
-#            print "burn"
-            self.module.burn = True
-            return
-        else:
-            self.module.burn = False
+
             
         gbds = []
+        
+        ds2 = []
         for seq in self.ds:
             for state_, action_, reward_ in seq:
 
-                #sample = dict(StateA=state_[0],StateB=state_[2],StateC=state_[1],StateD=state_[3],Action=action_[0],Reward=reward_[0])
-                sample = dict(theta=state_[0],thetaPrime=state_[2],s=state_[1],sPrime=state_[3],Action=action_[0],Reward=reward_[0])
+                #sample = dict(theta=state_[0],thetaV=state_[1],s=state_[2],sV=state_[3],Action=action_[0],Reward=reward_[0])
+                sample = dict(StateA=state_[0],StateB=state_[2],StateC=state_[1],StateD=state_[3],Action=action_[0],Reward=reward_[0])
 
-                if sample["Reward"] >= -0:
+                 #print state_, action_, reward_
+#                sample = dict(StateA=state_[0],StateB=state_[2],StateC=state_[1],StateD=state_[3],Action=action_[0],Reward=reward_[0])
+                #sample = dict(theta=state_[0],thetaPrime=state_[2],s=state_[1],sPrime=state_[3],Action=action_[0],Reward=reward_[0])
+
+                if sample["Reward"] >= 0:
                     gbds.append(sample)
+                    
+                if sample["Reward"] == -1:
+                    ds2.append(sample)
                 #print sample["Reward"]
 
         # sort samples for highest reward
@@ -117,13 +139,30 @@ class PGMTrainer(Trainer):
         #print bds
         # estimate parameters
 #        print "data size: ", len(bds),  len(gbds)
+        N = 200
+        if len(gbds) < N:
+            l = N - len(gbds)
+            n = len(ds2)
+            
+            t = len(ds2[n-l:])
+            gbds.extend(ds2[n-l:])
+            
+        print "ds:, ", len(gbds), len(ds2)
         
+        
+        if len(gbds) < 100:
+#            print "burn"
+            self.module.burn = True
+            return
+        else:
+            self.module.burn = False
+            
         
         if len(gbds) < 5: #there was no rewarding action, so nothing to learn
           self.module.burn = True
           return
           
-        N = 1000
+        N = 200
         if len(gbds) > N:
             #only take the newest N samples
 
@@ -133,8 +172,8 @@ class PGMTrainer(Trainer):
         
         skel = GraphSkeleton()
         #load network topology
-        #skel.load("net.txt")
-        skel.load("workfile")
+        skel.load("net2.txt")
+#        skel.load("workfile")
         skel.toporder()
 
 
